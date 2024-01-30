@@ -18,7 +18,11 @@ public class DefaultSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/index.html").permitAll()
+                        // 不可使用空字符串,否则直接报错
+                        // 静态文件放到 src/main/resources/static 目录即可
+                        // 需要配置 WebMvcConfigurer 才能 转发 / 到  /index.html
+                        // 这里测试通配符, /index.* 也可以写成 /index.html
+                        .requestMatchers("/","/index.*", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
